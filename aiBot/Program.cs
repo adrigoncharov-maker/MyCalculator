@@ -1,41 +1,57 @@
-﻿using System;
-
-public class App
+﻿public class App
 {
-    public static void Main(string[] args)
+    public static void Main()
     {
-        Console.WriteLine("Введите первое число: ");
-        double num1 = Convert.ToDouble(Console.ReadLine());
+        double num1 = ReadNumber("Введите первое число: ");
 
         Console.WriteLine("Введите знак: ");
-        string operation = Console.ReadLine();
+        string operation = (Console.ReadLine() ?? string.Empty).Trim();
 
-        Console.WriteLine("Введите второе число: ");
-        double num2 = Convert.ToDouble(Console.ReadLine());
+        if (operation == "sqrt")
+        {
+            Console.WriteLine(num1 < 0
+                ? "Ошибка: нельзя извлечь корень из отрицательного числа"
+                : $"Результат: {Math.Sqrt(num1)}");
+            return;
+        }
 
-        if (operation == "+")
+        double num2 = ReadNumber("Введите второе число: ");
+
+        switch (operation)
         {
-            Console.WriteLine($"Результат: {num1 + num2}");
+            case "+":
+                Console.WriteLine($"Результат: {num1 + num2}");
+                break;
+            case "-":
+                Console.WriteLine($"Результат: {num1 - num2}");
+                break;
+            case "*":
+                Console.WriteLine($"Результат: {num1 * num2}");
+                break;
+            case "/":
+                Console.WriteLine(num2 != 0
+                    ? $"Результат: {num1 / num2}"
+                    : "Ошибка: на 0 делить нельзя");
+                break;
+            case "^":
+                Console.WriteLine($"Результат: {Math.Pow(num1, num2)}");
+                break;
+            default:
+                Console.WriteLine("Ошибка: неизвестная операция");
+                break;
         }
-        else if (operation == "-")
+    }
+
+    private static double ReadNumber(string prompt)
+    {
+        while (true)
         {
-            Console.WriteLine($"Результат: {num1 - num2}");
-        }
-        else if (operation == "*")
-        {
-            Console.WriteLine($"Результат: {num1 * num2}");
-        }
-        else if (operation == "/")
-        {
-            Console.WriteLine($"Результат: {num1 / num2}");
-        }
-        if (num2 != 0)
-        {
-            Console.WriteLine($"Результат: {num1 / num2}");
-        }
-        else
-        {
-            Console.WriteLine("Ошибка: на 0 делить нельзя");
+            Console.WriteLine(prompt);
+            if (double.TryParse(Console.ReadLine(), out double value))
+            {
+                return value;
+            }
+            Console.WriteLine("Ошибка: введите корректное число");
         }
     }
 }
